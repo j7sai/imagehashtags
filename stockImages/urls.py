@@ -22,7 +22,7 @@ from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('imagesapp.urls')),
-    url(r'imageapp/', TemplateView.as_view(template_name="index.html"), name="home"),
+    path('api/',include('imagesapp.urls')),
+    url(r'', TemplateView.as_view(template_name="index.html"), name="home"),
     url(r'media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
