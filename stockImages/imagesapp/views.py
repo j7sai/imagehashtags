@@ -11,6 +11,7 @@ from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework.parsers import FormParser,MultiPartParser
 from django.contrib.auth import authenticate
+from django.db.models import F
 import json
 # Create your views here.
 
@@ -21,7 +22,6 @@ class ImageUploadView(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        # data["user"]=request.user
         newData = dict([])
         for field in request.FILES.keys():
             newData["images"] = []
@@ -39,7 +39,7 @@ class ImageUploadView(CreateAPIView):
 
 
 class ImagesListView(ListAPIView):
-    queryset = ImageSourceModel.objects.all()
+    queryset = ImageSourceModel.objects.all().order_by(F('image__createdDate').desc())
     serializer_class = ImageSourceSerializer
 
     def filter_queryset_date(self,dictonary,queryset):
@@ -57,8 +57,18 @@ class ImagesListView(ListAPIView):
             print(toDate,"sasaas")
             return queryset.filter(image__createdDate__lte=toDate)
         elif onDate:
+            print(onDate)
             dateList = onDate.split('-')
-
+            print(dateList)
+            if '*' in dateList:
+                star_index = dateList.index('*')
+                print(star_index,"sddsd")
+                if star_index == 0:
+                    return queryset.filter(image__createdDate__month=dateList[1],image__createdDate__year=dateList[2])
+                elif star_index == 1:
+                    return queryset.filter(image__createdDate__day=dateList[0],image__createdDate__year=dateList[2])
+                else:
+                    return queryset.filter(image__createdDate__day=dateList[0],image__createdDate__month=dateList[1])
             return queryset.filter(image__createdDate=onDate)
         elif fromDate:
             fromDate=datetime.strptime(fromDate, "%d-%m-%Y").date()

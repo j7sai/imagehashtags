@@ -137,6 +137,7 @@ class ImageUploadSerializer(ModelSerializer):
             self.create_images_sources(image,imagedetails)
         if len(images)==self.FAIL_IMAGES_COUNT:
             imagedetails.delete()
+            print("dsdsdsdsdsdsdsddsdsd")
             raise APIException(detail="AllImagesFailed",code=400)
         elif self.FAIL_IMAGES_COUNT>0:
             raise APIException(detail="PartialImagesSuccess-{0},{1}".format(self.FAIL_IMAGES_COUNT,len(images)-self.FAIL_IMAGES_COUNT),code=201)

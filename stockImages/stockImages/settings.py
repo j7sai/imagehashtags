@@ -54,7 +54,9 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'imagesapp.utils.custom_exception_handler'
+    'EXCEPTION_HANDLER': 'imagesapp.utils.custom_exception_handler',
+     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 30
 }
 
 ROOT_URLCONF = 'stockImages.urls'
@@ -138,5 +140,5 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT=os.path.join(os.path.dirname(BASE_DIR),"static")
 
-MEDIA_ROOT = os.path.join(BASE_DIR, '   ')
+MEDIA_ROOT = os.path.join(BASE_DIR, '')
 MEDIA_URL = '/media/'
